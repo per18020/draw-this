@@ -1,44 +1,51 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# react-ui
 
-## Available Scripts
+This project was bootstrapped by [Glamper](https://github.com/yeti/glamper)
 
-In the project directory, you can run:
+## Starting the Project
 
-### `npm start`
+1. Clone the repo
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+2. Install dependencies
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+```bash
+yarn install
+```
 
-### `npm test`
+2. If you are using Sentry, add a `.env` in the root of the project, since this is currently the only need for a `.env` file.
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+REACT_APP_SENTRY_DSN=...
+```
 
-### `npm run build`
+If you are not planning on using Sentry, uninstall the sentry npm package `yarn remove @sentry/browser` and remove the logic for initializing the SDK within the `index.js` file.
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Start the server
+```bash
+yarn start
+```
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+### Folder Structure
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+| Folder | Purpose |
+| ------ | ------ |
+|**services**| Any third party or Server related code lives here. The `Server` folder handles all of the api calls made to the backend while the `EpicMyChart` folder covers any wrappers or code we use to interact with the `MyChart` SDK.|
+| **constants** | Any constants that the app winds up needing that aren’t sensitive|
+| **global_styles** | Font imports and css for global resets, code highlighting, and the notebook |
+| **modules** | A high level abstraction representing a series of screens, state, side effects, and components that encapsulate a general theme or purpose. A good example of this is `profile`, which contains all of the logic for the profile state and whatever screens or components largely lead to changes in said state. |
+| **redux_setup** | Root reducer, store setup, and root epic. |
+| **shared** | Anything that should be accessible by any component or side effect. Examples include error logging actions and `colors`, which are used across multiple screens. |
+| **types** | The source of truth for all typescript types. This folder will _mostly_ mirror the above folder structure. |
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Libraries Used
+| Library |  |
+| ------ | ------ |
+| [Aphrodite](https://github.com/Khan/aphrodite) | CSS in JS |
+| [Jest](https://jestjs.io/) | Efficient testing through snapshots |
+| [Immer Reducer](https://lodash.com/docs) | Eliminates boilerplate through typesafe actions and immutable helpers from [Immer](https://github.com/immerjs/immer) |
+| [React](https://reactjs.org/) | Modular and extendable component based architecture |
+| [Redux](https://redux.js.org/) | Unidirectional state container |
+| [React Router](https://reacttraining.com/react-router/) | Navigation through components |
+| [Redux Thunk](https://redux-observable.js.org/) | Async side effect handling |
+| [Redux Logger](https://github.com/evgenyrodionov/redux-logger) | Action and state logging |
+| [Typescript](https://www.typescriptlang.org/) | Supercharged js with developer friendly static type checking |

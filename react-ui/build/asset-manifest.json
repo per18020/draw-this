@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/static/css/main.80b0850d.chunk.css",
+    "main.js": "/static/js/main.d7d29eb1.chunk.js",
+    "main.js.map": "/static/js/main.d7d29eb1.chunk.js.map",
+    "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
+    "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
+    "static/js/2.7fd999a5.chunk.js": "/static/js/2.7fd999a5.chunk.js",
+    "static/js/2.7fd999a5.chunk.js.map": "/static/js/2.7fd999a5.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.ce2cc388fa357f49372cb554cd9a4c31.js": "/precache-manifest.ce2cc388fa357f49372cb554cd9a4c31.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.80b0850d.chunk.css.map": "/static/css/main.80b0850d.chunk.css.map",
+    "static/media/antenna.845e40f0.svg": "/static/media/antenna.845e40f0.svg",
+    "static/media/earth.b18cde89.svg": "/static/media/earth.b18cde89.svg",
+    "static/media/yeti-head.png": "/static/media/yeti-head.86583762.png"
+  }
+}

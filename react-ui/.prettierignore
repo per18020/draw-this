@@ -1,0 +1,5 @@
+.eslintrc.js
+jest.config.js
+package.json
+README.md
+src/static
