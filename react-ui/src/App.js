@@ -16,7 +16,6 @@ function App() {
         <div className="field">
           <div className="control">
             <input className="input" type="text" placeholder="Input" />
-            <input className="input is-primary" type="text" placeholder="Primary input"></input>
           </div>
         </div>
     
