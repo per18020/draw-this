@@ -1,51 +1,42 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import './App.scss';
 
 function App() {
-  const [message, setMessage] = useState(null);
-  const [isFetching, setIsFetching] = useState(false);
-  const [url, setUrl] = useState('/api');
-
-  const fetchData = useCallback(() => {
-    fetch(url)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`status ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(json => {
-        setMessage(json.message);
-        setIsFetching(false);
-      }).catch(e => {
-        setMessage(`API call failed: ${e}`);
-        setIsFetching(false);
-      })
-  }, [url]);
-
-  useEffect(() => {
-    setIsFetching(true);
-    fetchData();
-  }, [fetchData]);
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        {
-          process.env.NODE_ENV === 'production' ?
-            <p>This is a production build from create-react-app.</p>
-            :
-            <p>Edit <code>src/App.js</code> and save to reload.</p>
-        }
-        <p>{'« '}<strong>{isFetching ? 'Fetching message from API' : message}</strong>{' »'}</p>
-        <p><a className="App-link" href="https://github.com/mars/heroku-cra-node">React + Node deployment on Heroku</a></p>
-        <p><a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">Learn React</a></p>
-      </header>
+    <div className="container">
+      <div className="section">
+        <h1 className="title">Bulma</h1>
+        <p className="subtitle">
+          Modern CSS framework based on{' '}
+          <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Basic_Concepts_of_Flexbox">
+            Flexbox
+          </a>
+        </p>
+    
+        <div className="field">
+          <div className="control">
+            <input className="input" type="text" placeholder="Input" />
+            <input className="input is-primary" type="text" placeholder="Primary input"></input>
+          </div>
+        </div>
+    
+        <div className="field">
+          <p className="control">
+            <span className="select">
+              <select>
+                <option>Select dropdown</option>
+              </select>
+            </span>
+          </p>
+        </div>
+    
+        <div className="buttons">
+          <button className="button is-primary">Primary</button>
+          <button className="button is-link">Link</button>
+        </div>
+      </div>
     </div>
   );
-
 }
 
 export default App;
