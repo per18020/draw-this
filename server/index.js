@@ -1,10 +1,11 @@
-const express = require('express');
 const path = require('path');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 
 const isDev = process.env.NODE_ENV !== 'production';
 const PORT = process.env.PORT || 5000;
+
+const apiRouter = require('./apiRouter');
 
 // Multi-process to utilize all CPU cores.
 if (!isDev && cluster.isMaster) {
@@ -20,18 +21,29 @@ if (!isDev && cluster.isMaster) {
   });
 
 } else {
+  const express = require('express');
   const app = express();
+  const server = require('http').Server(app);
+  const io = require('socket.io')(server);
 
-  // Priority serve any static files.
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
+
+  // Serve api
+  app.use('/api', apiRouter);
 
   // All remaining requests return the React app, so it can handle routing.
   app.get('*', function(request, response) {
     response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
   });
 
+  // IO testing
+  io.on('connection', socket => {
+    console.log("client connected!")
+    socket.emit('test', { hello: 'world' });
+  });
+  
   // Start 'er up!
-  app.listen(PORT, function () {
+  server.listen(PORT, function () {
     console.error(`Node ${isDev ? 'dev server' : 'cluster worker '+process.pid}: listening on port ${PORT}`);
   });
 }
