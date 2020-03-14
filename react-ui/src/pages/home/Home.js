@@ -1,28 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Redirect } from "react-router-dom";
-import axios from 'axios';
-import socketIOClient from "socket.io-client";
+import { connect } from 'react-redux';
+import { setGameUUID } from '../../redux/actions';
 
-function Home() {
+function Home({ socket, setGameUUID }) {
     const [toPregame, setToPregame] = useState(false);
 
-    useEffect(() => {
-        const socket = socketIOClient();
-        socket.on('test', data => console.log(data));
-    }, [])
-
     const handleCreateGame = () => {
-        axios.get("/api/createGame").then((res) => {            
+        socket.emit('createGame', gameUUID => {
+            setGameUUID(gameUUID);
             setToPregame(true);
-        })
+        });
     }
 
-    if (toPregame) return <Redirect to='/pregame' />
+    if (toPregame)
+        return <Redirect to='/pregame' />
 
     return (
         <section className="hero is-info is-fullheight">
             <div className="hero-body">
                 <div className="container">
+                    <div className="title">Project 02 / Drawing Game</div>
+                    <div className="subtitle">This page is really boring right now</div>
                     <button className="button" onClick={handleCreateGame}>Create Game</button>
                 </div>
             </div>
@@ -30,4 +29,8 @@ function Home() {
     );
 }
 
-export default Home;
+const mapStateToProps = state => {
+    return { socket: state.appReducer.socket };
+}
+
+export default connect(mapStateToProps, { setGameUUID })(Home);

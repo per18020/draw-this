@@ -6,6 +6,7 @@ const isDev = process.env.NODE_ENV !== 'production';
 const PORT = process.env.PORT || 5000;
 
 const apiRouter = require('./apiRouter');
+const SocketAPI = require('./socketAPI');
 
 // Multi-process to utilize all CPU cores.
 if (!isDev && cluster.isMaster) {
@@ -24,7 +25,6 @@ if (!isDev && cluster.isMaster) {
   const express = require('express');
   const app = express();
   const server = require('http').Server(app);
-  const io = require('socket.io')(server);
 
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
@@ -36,11 +36,7 @@ if (!isDev && cluster.isMaster) {
     response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
   });
 
-  // IO testing
-  io.on('connection', socket => {
-    console.log("client connected!")
-    socket.emit('test', { hello: 'world' });
-  });
+  new SocketAPI(server);
   
   // Start 'er up!
   server.listen(PORT, function () {

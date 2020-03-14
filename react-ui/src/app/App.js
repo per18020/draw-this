@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { MemoryRouter as Router, Switch, Route } from "react-router-dom";
+import socketIOClient from "socket.io-client";
+import { connect } from "react-redux";
+import { setSocket } from '../redux/actions';
 
 import './App.scss';
 
@@ -7,7 +10,12 @@ import Home from '../pages/home/Home';
 import Pregame from '../pages/pregame/Pregame';
 import Game from '../pages/game/Game';
 
-function App() {
+function App({ setSocket }) {
+  // Init
+  useEffect(() => {
+    setSocket(socketIOClient());
+  }, [])
+
   return (
     <Router>
       <Switch>
@@ -19,4 +27,4 @@ function App() {
   );
 }
 
-export default App;
+export default connect(null, { setSocket })(App);
