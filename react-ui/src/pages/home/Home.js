@@ -1,20 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 import { setGameUUID } from '../../redux/actions';
+import { useWindowSearchParameter } from '../../common/effects';
 
 function Home({ socket, setGameUUID }) {
-    const [toPregame, setToPregame] = useState(false);
+    const [toNextPage, setToNextPage] = useState(false);
+    const join = useWindowSearchParameter("join");
 
     const handleCreateGame = () => {
+        if (!socket) return; // Null check
         socket.emit('createGame', gameUUID => {
             setGameUUID(gameUUID);
-            setToPregame(true);
+            setToNextPage(true);
         });
     }
 
-    if (toPregame)
-        return <Redirect to='/pregame' />
+
+    useEffect(() => {
+        if (join && socket) {
+            socket.emit('gameExists', { gameUUID: join }, gameExists => {
+                if (gameExists) {
+                    setGameUUID(join);
+                    setToNextPage(true);
+                }
+            })
+        }
+    }, [socket]);
+
+    if (toNextPage)
+        return <Redirect to='/drawYourself' />
 
     return (
         <section className="hero is-info is-fullheight">
@@ -22,7 +37,7 @@ function Home({ socket, setGameUUID }) {
                 <div className="container">
                     <div className="title">Project 02 / Drawing Game</div>
                     <div className="subtitle">This page is really boring right now</div>
-                    <button className="button" onClick={handleCreateGame}>Create Game</button>
+                    <button className="button is-primary" onClick={handleCreateGame}>Create Game</button>
                 </div>
             </div>
         </section>

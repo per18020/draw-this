@@ -10,9 +10,18 @@ class GameManager {
     createGame() {
         let game = new Game();
         this.games.push(game);
-        console.log(game.getUUID());
 
         return game;
+    }
+
+    addPlayerToGame(gameUUID, socket, player) {
+        let game = this.getGame(gameUUID);
+        if (!game) return;
+        game.addPlayer(socket, player);
+    }
+
+    getGame(gameUUID) {
+        return this.games.find((game) => { return game.getUUID() === gameUUID });
     }
 
     static getInstance() {

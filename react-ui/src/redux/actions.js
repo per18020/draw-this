@@ -1,4 +1,4 @@
-import { SET_SOCKET, SET_GAMEUUID } from './actionTypes';
+import { SET_SOCKET, SET_GAMEUUID, SET_PLAYERS } from './actionTypes';
 
 // App Reducer
 export const setSocket = socket => ({
@@ -11,3 +11,8 @@ export const setGameUUID = gameUUID => ({
     type: SET_GAMEUUID,
     payload: gameUUID
 });
+
+export const setPlayers = players => ({
+    type: SET_PLAYERS,
+    payload: players
+})

@@ -9,6 +9,7 @@ import './App.scss';
 import Home from '../pages/home/Home';
 import Pregame from '../pages/pregame/Pregame';
 import Game from '../pages/game/Game';
+import DrawYourself from '../pages/drawYourself/DrawYourself';
 
 function App({ setSocket }) {
   // Init
@@ -20,6 +21,7 @@ function App({ setSocket }) {
     <Router>
       <Switch>
         <Route path="/" exact component={Home} />
+        <Route path="/drawYourself" component={DrawYourself} />
         <Route path="/pregame" component={Pregame} />
         <Route path="/game" component={Game} />
       </Switch>
