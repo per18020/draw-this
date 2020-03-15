@@ -23,7 +23,8 @@ class SocketAPI {
             socket.on('gameExists', (request, response) => {
                 let game = gm.getGame(request.gameUUID);
                 // There's probably a better way to do this
-                response(game ? game.getUUID() : game);
+                // response(game ? game.getUUID() : game);
+                response(gm.games.length);
             });
 
             socket.on('getPlayers', (request, response) => {
