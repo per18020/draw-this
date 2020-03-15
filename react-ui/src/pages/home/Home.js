@@ -19,9 +19,7 @@ function Home({ socket, setGameUUID }) {
     useEffect(() => {
         if (join && socket) {
             socket.emit('gameExists', { gameUUID: join }, gameExists => {
-                console.log(gameExists)
                 if (gameExists) {
-                    console.log("wow")
                     setGameUUID(join);
                     setToNextPage(true);
                 }
