@@ -24,11 +24,9 @@ class SocketAPI {
             socket.on('gameExists', (request, response) => {
                 let game = gm.getGame(request.gameUUID);
                 // There's probably a better way to do this
-                if (game) { 
-                    console.log("Game exists");
+                if (game !== undefined) { 
                     response(true);
                 } else {
-                    console.log("Game doesn't exists");
                     response(false);
                 }
             });

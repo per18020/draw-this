@@ -22,7 +22,7 @@ function Home({ socket, setGameUUID }) {
         if (join && socket) {
             console.log("zig")
             socket.emit('gameExists', { gameUUID: join }, gameExists => {
-                console.log("zag")
+                console.log("zag " + gameExists)
                 if (gameExists) {
                     console.log("wow")
                     setGameUUID(join);
