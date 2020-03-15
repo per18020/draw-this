@@ -27,7 +27,7 @@ class SocketAPI {
                 if (game !== undefined) { 
                     response(true);
                 } else {
-                    response(false);
+                    response(gm.games);
                 }
             });
 
