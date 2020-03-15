@@ -14,7 +14,7 @@ import DrawYourself from '../pages/drawYourself/DrawYourself';
 function App({ setSocket }) {
   // Init
   useEffect(() => {
-    setSocket(socketIOClient());
+    setSocket(socketIOClient({transports: ['websocket']}));
   }, [])
 
   return (
