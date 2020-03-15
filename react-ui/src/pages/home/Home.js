@@ -16,11 +16,15 @@ function Home({ socket, setGameUUID }) {
         });
     }
 
-
     useEffect(() => {
+        console.log(join)
+        console.log(socket)
         if (join && socket) {
+            console.log("zig")
             socket.emit('gameExists', { gameUUID: join }, gameExists => {
+                console.log("zag")
                 if (gameExists) {
+                    console.log("wow")
                     setGameUUID(join);
                     setToNextPage(true);
                 }
