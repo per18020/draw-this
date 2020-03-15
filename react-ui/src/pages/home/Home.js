@@ -17,17 +17,14 @@ function Home({ socket, setGameUUID }) {
     }
 
     useEffect(() => {
-        console.log(join)
-        console.log(socket)
         if (join && socket) {
-            console.log("zig")
             socket.emit('gameExists', { gameUUID: join }, gameExists => {
                 console.log(gameExists)
-                // if (gameExists) {
-                //     console.log("wow")
-                //     setGameUUID(join);
-                //     setToNextPage(true);
-                // }
+                if (gameExists) {
+                    console.log("wow")
+                    setGameUUID(join);
+                    setToNextPage(true);
+                }
             })
         }
     }, [socket]);

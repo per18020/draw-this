@@ -5,7 +5,6 @@ class SocketAPI {
         this.io = require('socket.io')(server);
 
         this.io.on('connection', socket => {
-            console.log('connected');
 
             socket.on('createGame', response => {
                 let game = gm.createGame();
@@ -24,11 +23,7 @@ class SocketAPI {
             socket.on('gameExists', (request, response) => {
                 let game = gm.getGame(request.gameUUID);
                 // There's probably a better way to do this
-                if (game !== undefined) { 
-                    response(true);
-                } else {
-                    response(gm.games);
-                }
+                response(game ? game.getUUID() : game);
             });
 
             socket.on('getPlayers', (request, response) => {
