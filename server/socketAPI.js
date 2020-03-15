@@ -5,6 +5,7 @@ class SocketAPI {
         this.io = require('socket.io')(server);
 
         this.io.on('connection', socket => {
+            console.log('connected');
 
             socket.on('createGame', response => {
                 let game = gm.createGame();
@@ -35,6 +36,8 @@ class SocketAPI {
             socket.on('getPlayers', (request, response) => {
                 response(this.getPlayers(request.gameUUID));
             })
+
+            
         });
     }
 

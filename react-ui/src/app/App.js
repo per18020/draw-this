@@ -3,6 +3,7 @@ import { MemoryRouter as Router, Switch, Route } from "react-router-dom";
 import socketIOClient from "socket.io-client";
 import { connect } from "react-redux";
 import { setSocket } from '../redux/actions';
+import { isDevelopment } from '../common/environment';
 
 import './App.scss';
 
@@ -14,7 +15,11 @@ import DrawYourself from '../pages/drawYourself/DrawYourself';
 function App({ setSocket }) {
   // Init
   useEffect(() => {
-    setSocket(socketIOClient({transports: ['websocket']}));
+    if (isDevelopment) {
+      setSocket(socketIOClient());
+    } else {
+      setSocket(socketIOClient({transports: ['websocket']}));
+    }
   }, [])
 
   return (
