@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { setPlayers } from '../../redux/actions';
+import { useBeforeunload } from 'react-beforeunload';
 
 import UserCard from './UserCard';
 
@@ -17,11 +18,19 @@ function Pregame({ socket, gameUUID, players, setPlayers }) {
             setPlayers(response);
         })
 
+        socket.on('playerLeft', response => {
+            setPlayers(response);
+        })
+
         // Cleanup
         return () => {
             socket.off('playerJoined');
         }
     }, [])
+
+    useBeforeunload(event => {
+        socket.emit('leaveGame', { gameUUID });
+    })
 
     const handleCopyPress = () => {
         linkInput.select();
@@ -39,13 +48,13 @@ function Pregame({ socket, gameUUID, players, setPlayers }) {
                     <label className="label">Copy this link to invite your friends</label>
                     <div className="field has-addons">
                         <div className="control is-expanded">
-                            <input 
+                            <input
                                 ref={(linkInput) => setLinkInput(linkInput)}
-                                onFocus={handleLinkFocus} 
-                                className="input" 
-                                type="text" 
-                                placeholder="Link goes here" 
-                                value={shareURL} 
+                                onFocus={handleLinkFocus}
+                                className="input"
+                                type="text"
+                                placeholder="Link goes here"
+                                value={shareURL}
                                 readOnly />
                         </div>
                         <div className="control">
@@ -83,7 +92,7 @@ function Pregame({ socket, gameUUID, players, setPlayers }) {
 const mapStateToProps = state => {
     return {
         socket: state.appReducer.socket,
-        gameUUID: state.gameReducer.gameUUID, 
+        gameUUID: state.gameReducer.gameUUID,
         players: state.gameReducer.players
     };
 }

@@ -26,6 +26,13 @@ class Game {
         });
     }
 
+    removePlayer(socket) {
+        let test = this.players.findIndex((obj) => {
+            return obj.socket.id === socket.id;
+        });
+        console.log(test);
+    }
+
     initSocket(socket) {
         
     }

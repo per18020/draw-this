@@ -20,6 +20,12 @@ class SocketAPI {
                 response();
             });
 
+            socket.on('leaveGame', request => {
+                console.log("Left game!");
+                gm.removePlayerFromGame(request.gameUUID, socket);
+                socket.in(request.gameUUID).emit('playerLeft', this.getPlayers(request.gameUUID));
+            });
+
             socket.on('gameExists', (request, response) => {
                 let game = gm.getGame(request.gameUUID);
                 // There's probably a better way to do this
@@ -30,7 +36,9 @@ class SocketAPI {
                 response(this.getPlayers(request.gameUUID));
             })
 
-            
+            socket.on('disconnect', () => {
+                
+            })
         });
     }
 
