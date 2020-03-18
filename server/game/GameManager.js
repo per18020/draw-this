@@ -5,7 +5,7 @@ let instance = null;
 class GameManager {
     constructor() {
         this.games = [];
-        this.socketGameMap = {};
+        this.socketGameMap = new Map();
 
         // Store socket id's related to gameUUIDs
         // Look up gameUUID based on id's
@@ -21,19 +21,26 @@ class GameManager {
     }
 
     addPlayerToGame(gameUUID, socket, player) {
+        this.socketGameMap.set(socket.id, gameUUID);
         let game = this.getGame(gameUUID);
         if (!game) return;
         game.addPlayer(socket, player);
     }
 
-    removePlayerFromGame(gameUUID, socket) {
+    removePlayerFromGame(socket) {
+        let gameUUID = this.lookupGameUUID(socket);
         let game = this.getGame(gameUUID);
         if (!game) return;
         game.removePlayer(socket);
+        this.socketGameMap.delete(socket.id);
     }
 
     getGame(gameUUID) {
         return this.games.find((game) => { return game.getUUID() === gameUUID });
+    }
+
+    lookupGameUUID(socket) {
+        return this.socketGameMap.get(socket.id);
     }
 
     static getInstance() {

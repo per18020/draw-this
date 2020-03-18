@@ -20,16 +20,9 @@ class SocketAPI {
                 response();
             });
 
-            socket.on('leaveGame', request => {
-                console.log("Left game!");
-                gm.removePlayerFromGame(request.gameUUID, socket);
-                socket.in(request.gameUUID).emit('playerLeft', this.getPlayers(request.gameUUID));
-            });
-
             socket.on('gameExists', (request, response) => {
                 let game = gm.getGame(request.gameUUID);
-                // There's probably a better way to do this
-                response(game ? game.getUUID() : game);
+                response(game ? game.getUUID() : game); // return null if game does not exist, non null if game exists
             });
 
             socket.on('getPlayers', (request, response) => {
@@ -37,7 +30,10 @@ class SocketAPI {
             })
 
             socket.on('disconnect', () => {
-                
+                let gameUUID = gm.lookupGameUUID(socket);
+                if (!gameUUID) return;
+                gm.removePlayerFromGame(socket);
+                socket.in(gameUUID).emit('playerLeft', this.getPlayers(gameUUID));
             })
         });
     }

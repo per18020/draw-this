@@ -12,10 +12,9 @@ class Game {
 
     getPlayers() {
         // Remove sockets
-        let players = this.players.map((obj) => {
+        return this.players.map((obj) => {
             return obj.player;
         });
-        return players;
     }
 
     addPlayer(socket, player) {
@@ -27,14 +26,12 @@ class Game {
     }
 
     removePlayer(socket) {
-        let test = this.players.findIndex((obj) => {
-            return obj.socket.id === socket.id;
-        });
-        console.log(test);
+        this.players = this.players.filter(obj => { return obj.socket.id !== socket.id });
+        console.log(this.players)
     }
 
     initSocket(socket) {
-        
+
     }
 }
 
