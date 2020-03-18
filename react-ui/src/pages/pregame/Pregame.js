@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { setPlayers } from '../../redux/actions';
-import { useBeforeunload } from 'react-beforeunload';
 
 import UserCard from './UserCard';
 
@@ -27,10 +26,6 @@ function Pregame({ socket, gameUUID, players, setPlayers }) {
             socket.off('playerJoined');
         }
     }, [])
-
-    useBeforeunload(event => {
-        socket.emit('leaveGame', { gameUUID });
-    })
 
     const handleCopyPress = () => {
         linkInput.select();
