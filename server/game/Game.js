@@ -27,7 +27,6 @@ class Game {
 
     removePlayer(socket) {
         this.players = this.players.filter(obj => { return obj.socket.id !== socket.id });
-        console.log(this.players)
     }
 
     initSocket(socket) {

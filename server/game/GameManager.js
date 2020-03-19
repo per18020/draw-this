@@ -7,9 +7,6 @@ class GameManager {
         this.games = [];
         this.socketGameMap = new Map();
 
-        // Store socket id's related to gameUUIDs
-        // Look up gameUUID based on id's
-        // Disconnect player from game using map
         // Also refactor rest of the code to not need to send or recieve gameUUID
     }
  
@@ -23,8 +20,9 @@ class GameManager {
     addPlayerToGame(gameUUID, socket, player) {
         this.socketGameMap.set(socket.id, gameUUID);
         let game = this.getGame(gameUUID);
-        if (!game) return;
-        game.addPlayer(socket, player);
+        if (game) {
+            game.addPlayer(socket, player);
+        }
     }
 
     removePlayerFromGame(socket) {
