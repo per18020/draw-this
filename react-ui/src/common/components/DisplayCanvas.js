@@ -5,10 +5,12 @@ function DisplayCanvas({ canvasData }) {
     const [canvasRef, setCanvasRef] = useState(null);
 
     useEffect(() => {
+        console.log("zig")
         if (canvasRef && canvasData) {
+            console.log("zag")
             canvasRef.loadSaveData(canvasData);
         }
-    }, [canvasRef])
+    }, [canvasRef, canvasData])
 
     return (
         <>
