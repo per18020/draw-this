@@ -5,7 +5,7 @@ function DisplayCanvas({ canvasData }) {
     const [canvasRef, setCanvasRef] = useState(null);
 
     useEffect(() => {
-        if (canvasRef) {
+        if (canvasRef && canvasData) {
             canvasRef.loadSaveData(canvasData);
         }
     }, [canvasRef])
