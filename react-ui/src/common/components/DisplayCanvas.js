@@ -4,25 +4,23 @@ import CanvasDraw from 'react-canvas-draw';
 function DisplayCanvas({ canvasData }) {
     const [canvasRef, setCanvasRef] = useState(null);
 
-    useEffect(() => {
-        if (canvasRef && canvasData) {
-            console.log("zag")
-            canvasRef.loadSaveData(canvasData);
-        }
-    }, [canvasRef, canvasData])
+    // useEffect(() => {
+    //     if (canvasRef && canvasData) {
+    //         canvasRef.loadSaveData(canvasData);
+    //     }
+    // }, [canvasRef, canvasData])
 
     return (
-        <>
-            <CanvasDraw
-                ref={canvasDraw => (setCanvasRef(canvasDraw))}
-                loadTimeOffset={0.7}
-                canvasWidth={64}
-                canvasHeight={64}
-                hideGrid
-                hideInterface
-                disabled
-            />
-        </>
+        <CanvasDraw
+            ref={canvasDraw => (setCanvasRef(canvasDraw))}
+            loadTimeOffset={1}
+            canvasWidth={64}
+            canvasHeight={64}
+            hideGrid
+            hideInterface
+            disabled
+            saveData={canvasData}
+        />
     );
 }
 

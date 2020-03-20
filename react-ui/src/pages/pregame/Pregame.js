@@ -7,15 +7,17 @@ import UserCard from './UserCard';
 
 function Pregame({ socket, gameUUID, players, setPlayers }) {
     const [linkInput, setLinkInput] = useState(null);
-    const shareURL = window.location.protocol + "//" + window.location.host + "/?join=" + gameUUID;
+    const shareURL = window.location.protocol + "//" + window.location.host + "/?join=" + gameUUID; // Abstract to hook?
 
     useEffect(() => {
         socket.emit('getPlayers', { gameUUID }, response => {
             setPlayers(response);
+            console.log("zig")
         });
 
         socket.on('playerJoined', response => {
             setPlayers(response);
+            console.log("zag")
         })
 
         socket.on('playerLeft', response => {
@@ -25,6 +27,7 @@ function Pregame({ socket, gameUUID, players, setPlayers }) {
         // Cleanup
         return () => {
             socket.off('playerJoined');
+            socket.off('playerLeft');
         }
     }, [])
 
