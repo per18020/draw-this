@@ -7,6 +7,6 @@ export function stringifyAndCompress(obj) {
 export function decompressAndParse(str) {
     console.log(str);
     console.log(LZString.decompressFromUTF16(str));
-    console.log(JSON.parse(LZString.decompress(str)));
+    console.log(JSON.parse(LZString.decompressFromUTF16(str)));
     return JSON.parse(LZString.decompressFromUTF16(str));
 }
