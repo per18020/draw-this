@@ -4,6 +4,9 @@ export function stringifyAndCompress(obj) {
     return LZString.compress(JSON.stringify(obj));
 }
 
-export function decompressAndParse(string) {
-    return JSON.parse(LZString.decompress(string));
+export function decompressAndParse(str) {
+    console.log(str);
+    console.log(LZString.decompress(str));
+    console.log(JSON.parse(LZString.decompress(str)));
+    return JSON.parse(LZString.decompress(str));
 }

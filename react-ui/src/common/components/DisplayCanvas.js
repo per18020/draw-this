@@ -5,8 +5,6 @@ function DisplayCanvas({ canvasData }) {
     const [canvasRef, setCanvasRef] = useState(null);
 
     useEffect(() => {
-        console.log("displayCanvas")
-        console.log(canvasData)
         if (canvasRef && canvasData) {
             console.log("zag")
             canvasRef.loadSaveData(canvasData);
