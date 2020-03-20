@@ -1,13 +1,17 @@
 import React, { useState } from 'react'
 import { Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
+import { stringifyAndCompress } from '../../common/util';
 
-function DrawYourself({ socket, gameUUID }) {
+import Canvas from '../../common/components/Canvas';
+
+function DrawYourself({ socket, currentCanvasData, gameUUID }) {
     const [toNextPage, setToNextPage] = useState(false);
     const [nickname, setNickname] = useState("");
 
     const handleContinue = () => {
-        socket.emit('joinGame', { player: { nickname }, gameUUID }, () => {
+        let compressedAvatarData = stringifyAndCompress(currentCanvasData);
+        socket.emit('joinGame', { player: { nickname, compressedAvatarData }, gameUUID }, () => {
             setToNextPage(true);
         });
     }
@@ -22,16 +26,21 @@ function DrawYourself({ socket, gameUUID }) {
     return (
         <div className="container">
             <div className="section">
-                <div className="title">Draw Yourself</div>
-                <div className="subtitle">And then there's going to be a canvas here to draw your avatar</div>
-
-                <label className="label">Nickname</label>
-                <div className="field has-addons">
-                    <div className="control is-expanded">
-                        <input onChange={handleNickNameChange} className="input" type="text" placeholder="A super awesome nickname"/>
+                <div className="columns">
+                    <div className="column">
+                        <div className="title">Draw Yourself</div>
+                        <Canvas autoSave ></Canvas>
                     </div>
-                    <div className="control">
-                        <button onClick={handleContinue} className="button is-primary">Continue</button>
+                    <div className="column">
+                        <label className="label">Nickname</label>
+                        <div className="field has-addons">
+                            <div className="control is-expanded">
+                                <input onChange={handleNickNameChange} className="input" type="text" placeholder="A super awesome nickname" />
+                            </div>
+                            <div className="control">
+                                <button onClick={handleContinue} className="button is-primary">Continue</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -40,8 +49,9 @@ function DrawYourself({ socket, gameUUID }) {
 }
 
 const mapStateToProps = state => {
-    return { 
+    return {
         socket: state.appReducer.socket,
+        currentCanvasData: state.appReducer.currentCanvasData,
         gameUUID: state.gameReducer.gameUUID
     };
 }

@@ -1,4 +1,8 @@
-import { SET_SOCKET, SET_GAMEUUID, SET_PLAYERS } from './actionTypes';
+import { 
+    SET_CURRENT_CANVAS_DATA,
+    SET_SOCKET, 
+    SET_GAMEUUID, 
+    SET_PLAYERS } from './actionTypes';
 
 // App Reducer
 export const setSocket = socket => ({
@@ -15,4 +19,9 @@ export const setGameUUID = gameUUID => ({
 export const setPlayers = players => ({
     type: SET_PLAYERS,
     payload: players
+})
+
+export const setCurrentCanvasData = data => ({
+    type: SET_CURRENT_CANVAS_DATA,
+    payload: data
 })

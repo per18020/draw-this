@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { setPlayers } from '../../redux/actions';
+import { decompressAndParse } from '../../common/util';
 
 import UserCard from './UserCard';
 
@@ -73,7 +74,10 @@ function Pregame({ socket, gameUUID, players, setPlayers }) {
                         <div className="box">
                             {
                                 players.map((player, index) => {
-                                    return <UserCard key={index} name={player.nickname}></UserCard>
+                                    return <UserCard 
+                                                key={index} 
+                                                name={player.nickname} 
+                                                canvasData={decompressAndParse(player.compressedAvatarData)} />
                                 })
                             }
                         </div>

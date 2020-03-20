@@ -5,9 +5,11 @@
   "dependencies": {
     "axios": "^0.19.2",
     "bulma": "^0.8.0",
+    "lz-string": "^1.4.4",
     "node-sass": "^4.13.1",
     "react": "^16.8.6",
     "react-beforeunload": "^2.1.0",
+    "react-canvas-draw": "^1.1.0",
     "react-dom": "^16.8.6",
     "react-redux": "^7.2.0",
     "react-router": "^5.1.2",

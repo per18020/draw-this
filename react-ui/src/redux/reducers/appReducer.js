@@ -1,7 +1,8 @@
-import { SET_SOCKET } from '../actionTypes';
+import { SET_SOCKET, SET_CURRENT_CANVAS_DATA } from '../actionTypes';
 
 const initialState = {
-    socket: null
+    socket: null,
+    currentCanvasData: null
 }
 
 export default function(state = initialState, action) {
@@ -11,6 +12,13 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 socket
+            }
+        }
+        case SET_CURRENT_CANVAS_DATA: {
+            const currentCanvasData = action.payload;
+            return {
+                ...state,
+                currentCanvasData
             }
         }
         default:
