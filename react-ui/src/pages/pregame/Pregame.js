@@ -12,12 +12,10 @@ function Pregame({ socket, gameUUID, players, setPlayers }) {
     useEffect(() => {
         socket.emit('getPlayers', { gameUUID }, response => {
             setPlayers(response);
-            console.log("zig")
         });
 
         socket.on('playerJoined', response => {
             setPlayers(response);
-            console.log("zag")
         })
 
         socket.on('playerLeft', response => {

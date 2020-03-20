@@ -8,16 +8,17 @@ class SocketAPI {
 
             socket.on('createGame', response => {
                 let game = gm.createGame();
-                console.log("Made game " + game.getUUID());
                 response(game.getUUID());
             });
 
             socket.on('joinGame', (request, response) => {
-                gm.addPlayerToGame(request.gameUUID, socket, request.player);
-                socket.join(request.gameUUID);
-                socket.in(request.gameUUID).emit('playerJoined', this.getPlayers(request.gameUUID));
-                console.log("Player joined game " + request.gameUUID);
-                response();
+                let successful = gm.addPlayerToGame(request.gameUUID, socket, request.player);
+                if (successful) {
+                    socket.join(request.gameUUID);
+                    socket.in(request.gameUUID).emit('playerJoined', this.getPlayers(request.gameUUID));
+                    response(true);
+                }
+                response(false);
             });
 
             socket.on('gameExists', (request, response) => {

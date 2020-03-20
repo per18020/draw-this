@@ -7,7 +7,13 @@ class GameManager {
         this.games = [];
         this.socketGameMap = new Map();
 
-        // Also refactor rest of the code to not need to send or recieve gameUUID
+        setInterval(this.cleanupStagnantGames.bind(this), 1000);
+    }
+
+    cleanupStagnantGames() {
+        this.games = this.games.filter(game => {
+            return game.isActive();
+        })
     }
  
     createGame() {
@@ -22,7 +28,9 @@ class GameManager {
         let game = this.getGame(gameUUID);
         if (game) {
             game.addPlayer(socket, player);
+            return true;
         }
+        return false;        
     }
 
     removePlayerFromGame(socket) {

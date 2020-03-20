@@ -11,28 +11,33 @@ import Home from '../pages/home/Home';
 import Pregame from '../pages/pregame/Pregame';
 import Game from '../pages/game/Game';
 import DrawYourself from '../pages/drawYourself/DrawYourself';
+import TimeoutContainer from '../pages/timeout/TimeoutContainer';
+import Timeout from '../pages/timeout/Timeout';
 
 function App({ setSocket }) {
   // Init
   useEffect(() => {
+    let socket;
     if (isDevelopment) {
-      setSocket(socketIOClient());
+      socket = socketIOClient()
     } else {
-      setSocket(socketIOClient({transports: ['websocket']}));
+      socket = socketIOClient({ transports: ['websocket'] })
     }
+    setSocket(socket);
   }, [])
 
   return (
     <Router>
+      <TimeoutContainer />
       <Switch>
         <Route path="/" exact component={Home} />
         <Route path="/drawYourself" component={DrawYourself} />
         <Route path="/pregame" component={Pregame} />
         <Route path="/game" component={Game} />
+        <Route path="/timeout" component={Timeout} />
       </Switch>
     </Router>
   );
 }
-
 
 export default connect(null, { setSocket })(App);

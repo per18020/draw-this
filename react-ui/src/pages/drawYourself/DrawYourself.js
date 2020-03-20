@@ -7,12 +7,18 @@ import Canvas from '../../common/components/Canvas';
 
 function DrawYourself({ socket, currentCanvasData, gameUUID }) {
     const [toNextPage, setToNextPage] = useState(false);
+    const [toTimeout, setToTimeout] = useState(false);
     const [nickname, setNickname] = useState("");
 
     const handleContinue = () => {
         let compressedAvatarData = stringifyAndCompress(currentCanvasData);
-        socket.emit('joinGame', { player: { nickname, compressedAvatarData }, gameUUID }, () => {
-            setToNextPage(true);
+        socket.emit('joinGame', { player: { nickname, compressedAvatarData }, gameUUID }, successful => {
+            if (successful) {
+                setToNextPage(true);
+            } else {
+                setToTimeout(true);
+            }
+            
         });
     }
 
@@ -20,8 +26,11 @@ function DrawYourself({ socket, currentCanvasData, gameUUID }) {
         setNickname(event.target.value);
     }
 
+    if (toTimeout)
+        return <Redirect to="/timeout" />
+
     if (toNextPage)
-        return <Redirect to='/pregame' />
+        return <Redirect to="/pregame" />
 
     return (
         <div className="container">
