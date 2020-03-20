@@ -2,6 +2,9 @@ import React from 'react';
 import DisplayCanvas from '../../common/components/DisplayCanvas';
 
 function UserCard(props) {
+    console.log("userCard");
+    console.log(props.canvasData)
+
     return (
         <div className="media-content">
             <div className="columns is-vcentered">
