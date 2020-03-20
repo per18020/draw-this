@@ -40,6 +40,7 @@ class SocketAPI {
 
     getPlayers(gameUUID) {
         let game = gm.getGame(gameUUID);
+        if (!game) return;
         return game.getPlayers();
     }
 }

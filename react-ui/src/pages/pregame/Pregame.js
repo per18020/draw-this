@@ -75,6 +75,7 @@ function Pregame({ socket, gameUUID, players, setPlayers }) {
                             {
                                 players.map((player, index) => {
                                     console.log("pregame");
+                                    console.log(player.compressedAvatarData);
                                     console.log(decompressAndParse(player.compressedAvatarData));
                                     return <UserCard 
                                                 key={index} 
