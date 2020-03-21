@@ -7,9 +7,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy } from '@fortawesome/free-solid-svg-icons'
 
 import UserCard from './UserCard';
+import { Redirect } from 'react-router';
 
 function Pregame({ socket, gameUUID, players, setPlayers, player }) {
     const [linkInput, setLinkInput] = useState(null);
+    const [toGame, setToGame] = useState(null);
     const shareURL = window.location.protocol + "//" + window.location.host + "/?join=" + gameUUID; // Abstract to hook?
 
     useEffect(() => {
@@ -41,6 +43,10 @@ function Pregame({ socket, gameUUID, players, setPlayers, player }) {
         event.target.select();
     }
 
+    const handleStartGame = () => {
+        setToGame(true);
+    }
+
     const isGameOwner = () => {
         if (!players) return false;
         let gameOwner = players.find(player => {
@@ -49,6 +55,9 @@ function Pregame({ socket, gameUUID, players, setPlayers, player }) {
         if (!gameOwner) return false;
         return gameOwner.id === player;
     }
+
+    if (toGame)
+        return <Redirect to="/game" />
 
     return (
         <div className="container">
@@ -86,7 +95,7 @@ function Pregame({ socket, gameUUID, players, setPlayers, player }) {
                                 And then settings will be here
                             </div>
                         </div>
-                        <button className="button is-primary" disabled={!isGameOwner()}>Start Game</button>
+                        <button onClick={handleStartGame} className="button is-primary" disabled={!isGameOwner()}>Start Game</button>
                     </div>
                     <div className="column">
                         <div className="box">

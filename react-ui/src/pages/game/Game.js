@@ -1,8 +1,16 @@
 import React from 'react'
 
+import Describer from './Describer';
+import Drawer from './Drawer';
+
 function Game() {
     return (
-        <div className="title">Game</div>
+        <div className="container">
+            <div className="section">
+                <Describer></Describer>
+                <Drawer></Drawer>
+            </div>
+        </div>
     );
 }
 
