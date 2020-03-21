@@ -2,6 +2,7 @@ import React from 'react';
 import CanvasDraw from 'react-canvas-draw';
 
 function DisplayCanvas({ canvasData }) {
+    if (!canvasData) canvasData = "";
     return (
         <CanvasDraw
             saveData={canvasData}

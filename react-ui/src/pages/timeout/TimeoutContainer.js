@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 
-
 function TimeoutContainer({ socket }) {
     const [toTimeout, setToTimeout] = useState(false)
 

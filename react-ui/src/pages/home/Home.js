@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { setGameUUID } from '../../redux/actions';
 import { useWindowSearchParameter } from '../../common/effects';
 
+import Canvas from '../../common/components/canvas/Canvas';
+
 function Home({ socket, setGameUUID }) {
     const [toNextPage, setToNextPage] = useState(false);
     const join = useWindowSearchParameter("join");
@@ -31,12 +33,19 @@ function Home({ socket, setGameUUID }) {
         return <Redirect to='/drawYourself' />
 
     return (
-        <section className="hero is-info is-fullheight">
+        <section className="hero is-fullheight">
             <div className="hero-body">
                 <div className="container">
-                    <div className="title">Project 02 / Drawing Game</div>
-                    <div className="subtitle">This page is really boring right now</div>
-                    <button className="button is-primary" onClick={handleCreateGame}>Create Game</button>
+                    <div className="columns">
+                        <div className="column">
+                            <Canvas />
+                        </div>
+                        <div className="column">
+                            <div className="title">Draw This</div>
+                            <div className="subtitle">A game where you draw things</div>
+                            <button className="button is-primary" onClick={handleCreateGame}>Create Game</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

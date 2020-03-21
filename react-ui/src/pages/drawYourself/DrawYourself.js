@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import { Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 import { stringifyAndCompress } from '../../common/util';
+import { setPlayer } from '../../redux/actions';
 
-import Canvas from '../../common/components/Canvas';
+import Canvas from '../../common/components/canvas/Canvas';
 
-function DrawYourself({ socket, currentCanvasData, gameUUID }) {
+function DrawYourself({ socket, currentCanvasData, gameUUID, setPlayer }) {
     const [toNextPage, setToNextPage] = useState(false);
     const [toTimeout, setToTimeout] = useState(false);
     const [nickname, setNickname] = useState("");
@@ -18,8 +19,8 @@ function DrawYourself({ socket, currentCanvasData, gameUUID }) {
             } else {
                 setToTimeout(true);
             }
-            
         });
+        setPlayer(socket.id);
     }
 
     const handleNickNameChange = event => {
@@ -36,21 +37,20 @@ function DrawYourself({ socket, currentCanvasData, gameUUID }) {
         <div className="container">
             <div className="section">
                 <div className="columns">
+                <div className="column"></div>
                     <div className="column">
                         <div className="title">Draw Yourself</div>
                         <Canvas autoSave ></Canvas>
-                    </div>
-                    <div className="column">
-                        <label className="label">Nickname</label>
                         <div className="field has-addons">
                             <div className="control is-expanded">
                                 <input onChange={handleNickNameChange} className="input" type="text" placeholder="A super awesome nickname" />
                             </div>
                             <div className="control">
-                                <button onClick={handleContinue} className="button is-primary">Continue</button>
+                                <button onClick={handleContinue} className="button is-primary" disabled={!nickname}>Continue</button>
                             </div>
                         </div>
                     </div>
+                    <div className="column"></div>
                 </div>
             </div>
         </div>
@@ -65,4 +65,4 @@ const mapStateToProps = state => {
     };
 }
 
-export default connect(mapStateToProps)(DrawYourself);
+export default connect(mapStateToProps, { setPlayer })(DrawYourself);

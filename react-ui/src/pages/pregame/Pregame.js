@@ -3,9 +3,12 @@ import { connect } from 'react-redux';
 import { setPlayers } from '../../redux/actions';
 import { decompressAndParse } from '../../common/util';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCopy } from '@fortawesome/free-solid-svg-icons'
+
 import UserCard from './UserCard';
 
-function Pregame({ socket, gameUUID, players, setPlayers }) {
+function Pregame({ socket, gameUUID, players, setPlayers, player }) {
     const [linkInput, setLinkInput] = useState(null);
     const shareURL = window.location.protocol + "//" + window.location.host + "/?join=" + gameUUID; // Abstract to hook?
 
@@ -38,6 +41,15 @@ function Pregame({ socket, gameUUID, players, setPlayers }) {
         event.target.select();
     }
 
+    const isGameOwner = () => {
+        if (!players) return false;
+        let gameOwner = players.find(player => {
+            return player.gameOwner;
+        });
+        if (!gameOwner) return false;
+        return gameOwner.id === player;
+    }
+
     return (
         <div className="container">
             <div className="section">
@@ -55,7 +67,12 @@ function Pregame({ socket, gameUUID, players, setPlayers }) {
                                 readOnly />
                         </div>
                         <div className="control">
-                            <button onClick={handleCopyPress} className="button is-link">Copy</button>
+                            <button onClick={handleCopyPress} className="button is-link">
+                                <span className="icon">
+                                    <FontAwesomeIcon icon={faCopy} />
+                                </span>
+                                <span>Copy</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -69,16 +86,17 @@ function Pregame({ socket, gameUUID, players, setPlayers }) {
                                 And then settings will be here
                             </div>
                         </div>
-                        <div className="button is-primary">Start Game</div>
+                        <button className="button is-primary" disabled={!isGameOwner()}>Start Game</button>
                     </div>
                     <div className="column">
                         <div className="box">
                             {
                                 players.map((player, index) => {
-                                    return <UserCard 
-                                                key={index} 
-                                                name={player.nickname} 
-                                                canvasData={decompressAndParse(player.compressedAvatarData)} />
+                                    return <UserCard
+                                        key={index}
+                                        name={player.nickname}
+                                        canvasData={decompressAndParse(player.compressedAvatarData)}
+                                        gameOwner={player.gameOwner} />
                                 })
                             }
                         </div>
@@ -93,7 +111,8 @@ const mapStateToProps = state => {
     return {
         socket: state.appReducer.socket,
         gameUUID: state.gameReducer.gameUUID,
-        players: state.gameReducer.players
+        players: state.gameReducer.players,
+        player: state.gameReducer.player
     };
 }
 

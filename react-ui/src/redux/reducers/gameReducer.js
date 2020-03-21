@@ -1,8 +1,9 @@
-import { SET_GAMEUUID, SET_PLAYERS } from '../actionTypes';
+import { SET_GAMEUUID, SET_PLAYERS, SET_PLAYER } from '../actionTypes';
 
 const initialState = {
     gameUUID: "",
     players: [],
+    player: {},
     settings: {}
 }
 
@@ -20,6 +21,13 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 players
+            }
+        }
+        case SET_PLAYER: {
+            const player = action.payload;
+            return {
+                ...state,
+                player
             }
         }
         default:

@@ -1,5 +1,8 @@
 import React from 'react';
-import DisplayCanvas from '../../common/components/DisplayCanvas';
+import DisplayCanvas from '../../common/components/canvas/DisplayCanvas';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCrown } from '@fortawesome/free-solid-svg-icons'
 
 function UserCard(props) {
     return (
@@ -15,6 +18,13 @@ function UserCard(props) {
                         {props.name}
                     </div>
                 </div>
+                {props.gameOwner &&
+                    <div className="column is-narrow">
+                        <span className="icon has-text-warning">
+                            <FontAwesomeIcon icon={faCrown} />
+                        </span>
+                    </div>
+                }
             </div>
         </div>
     );

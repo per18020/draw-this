@@ -25,6 +25,8 @@ class Game {
     addPlayer(socket, player) {
         this.onActivity();
         this.initSocket(socket);
+        player.gameOwner = this.players.length == 0
+        player.id = socket.id;
         this.players.push({
             socket,
             player
@@ -33,6 +35,7 @@ class Game {
 
     removePlayer(socket) {
         this.players = this.players.filter(obj => { return obj.socket.id !== socket.id });
+        this.players.forEach((obj, index) => { return obj.player.gameOwner = index == 0; }); // Change game owner to the next person 
         this.active = !!this.players.length;
     }
 
