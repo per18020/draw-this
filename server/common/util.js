@@ -6,4 +6,8 @@ function secondsToMilliseconds(seconds) {
     return seconds * 1000;
 }
 
-module.exports = { minutesToMilliseconds, secondsToMilliseconds }
+function randomInt(min, max) { 
+    return Math.floor(Math.random() * (max - min)) 
+}
+
+module.exports = { minutesToMilliseconds, secondsToMilliseconds, randomInt }

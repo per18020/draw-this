@@ -3,12 +3,18 @@ import {
     SET_SOCKET, 
     SET_GAMEUUID, 
     SET_PLAYERS,
-    SET_PLAYER } from './actionTypes';
+    SET_PLAYER,
+    SET_DESCRIBER } from './actionTypes';
 
 // App Reducer
 export const setSocket = socket => ({
     type: SET_SOCKET,
     payload: socket
+});
+
+export const setCurrentCanvasData = data => ({
+    type: SET_CURRENT_CANVAS_DATA,
+    payload: data
 });
 
 // Game Reducer
@@ -27,7 +33,7 @@ export const setPlayer = player => ({
     payload: player
 });
 
-export const setCurrentCanvasData = data => ({
-    type: SET_CURRENT_CANVAS_DATA,
-    payload: data
+export const setDescriber = describer => ({
+    type: SET_DESCRIBER,
+    payload: describer
 })

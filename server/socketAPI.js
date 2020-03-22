@@ -1,18 +1,17 @@
-const gm = require('./game/GameManager').getInstance();
-
 class SocketAPI {
     constructor(server) {
         this.io = require('socket.io')(server);
+        this.gm = require('./game/GameManager').getInstance(this.io);
 
         this.io.on('connection', socket => {
 
             socket.on('createGame', response => {
-                let game = gm.createGame();
+                let game = this.gm.createGame();
                 response(game.getUUID());
             });
 
             socket.on('joinGame', (request, response) => {
-                let successful = gm.addPlayerToGame(request.gameUUID, socket, request.player);
+                let successful = this.gm.addPlayerToGame(request.gameUUID, socket, request.player);
                 if (successful) {
                     socket.join(request.gameUUID);
                     socket.in(request.gameUUID).emit('playerJoined', this.getPlayers(request.gameUUID));
@@ -21,8 +20,14 @@ class SocketAPI {
                 response(false);
             });
 
+            socket.on('startGame', () => {
+                let gameUUID = this.gm.lookupGameUUID(socket);
+                this.gm.startGame(gameUUID);
+                this.io.in(gameUUID).emit('gameStarted');
+            });
+
             socket.on('gameExists', (request, response) => {
-                let game = gm.getGame(request.gameUUID);
+                let game = this.gm.getGame(request.gameUUID);
                 response(game ? game.getUUID() : game); // return null if game does not exist, non null if game exists
             });
 
@@ -31,16 +36,16 @@ class SocketAPI {
             })
 
             socket.on('disconnect', () => {
-                let gameUUID = gm.lookupGameUUID(socket);
+                let gameUUID = this.gm.lookupGameUUID(socket);
                 if (!gameUUID) return;
-                gm.removePlayerFromGame(socket);
+                this.gm.removePlayerFromGame(socket);
                 socket.in(gameUUID).emit('playerLeft', this.getPlayers(gameUUID));
             })
         });
     }
 
     getPlayers(gameUUID) {
-        let game = gm.getGame(gameUUID);
+        let game = this.gm.getGame(gameUUID);
         if (!game) return;
         return game.getPlayers();
     }

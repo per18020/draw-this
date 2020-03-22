@@ -2,13 +2,28 @@ const shortUUID = require('short-uuid');
 const util = require('../common/util');
 
 class Game {
-    constructor() {
+    constructor(io) {
+        this.io = io;
+
         this.uuid = shortUUID.generate();
         this.players = [];
         this.timeout = null;
         this.active = true;
 
+        this.describerHistory = [];
+        this.currentDescriber = {};
+
+        this.numPlayersReadyForScoring = 0;
+
+        this.prompt = "";
+
         this.setTimeout();
+    }
+
+    startGame() {
+        let describerObj = this.players[util.randomInt(0, this.players.length)];
+        this.describerHistory.push(describerObj);
+        this.currentDescriber = describerObj.player;
     }
 
     getUUID() {
@@ -64,7 +79,27 @@ class Game {
     }
 
     initSocket(socket) {
+        socket.on('game:getDescriber', response => {
+            response(this.currentDescriber);
+        })
 
+        socket.on('game:getPrompt', response => {
+            response(this.prompt);
+        })
+
+        socket.on('game:sendPrompt', request => {
+            this.prompt = request.prompt;
+            socket.in(this.uuid).emit('game:listenForPrompt', this.prompt);
+        })
+
+        socket.on('game:readyForScoring', () => {
+            this.numPlayersReadyForScoring++;
+            if (this.numPlayersReadyForScoring === this.players.length) 
+                {
+                    this.numPlayersReadyForScoring = 0;
+                    this.io.in(this.uuid).emit('game:everyoneIsReadyForScoring');
+                }
+        })
     }
 }
 

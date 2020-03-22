@@ -27,10 +27,15 @@ function Pregame({ socket, gameUUID, players, setPlayers, player }) {
             setPlayers(response);
         })
 
+        socket.on('gameStarted', () => {
+            setToGame(true);
+        })
+
         // Cleanup
         return () => {
             socket.off('playerJoined');
             socket.off('playerLeft');
+            socket.off('gameStarted');
         }
     }, [])
 
@@ -44,7 +49,12 @@ function Pregame({ socket, gameUUID, players, setPlayers, player }) {
     }
 
     const handleStartGame = () => {
-        setToGame(true);
+        socket.emit('startGame');
+    }
+
+    const canStartGame = () => {
+        return true;
+        return players.length > 1;
     }
 
     const isGameOwner = () => {
@@ -95,7 +105,7 @@ function Pregame({ socket, gameUUID, players, setPlayers, player }) {
                                 And then settings will be here
                             </div>
                         </div>
-                        <button onClick={handleStartGame} className="button is-primary" disabled={!isGameOwner()}>Start Game</button>
+                        <button onClick={handleStartGame} className="button is-primary" disabled={!isGameOwner() || !canStartGame()}>Start Game</button>
                     </div>
                     <div className="column">
                         <div className="box">
@@ -116,13 +126,11 @@ function Pregame({ socket, gameUUID, players, setPlayers, player }) {
     );
 }
 
-const mapStateToProps = state => {
-    return {
-        socket: state.appReducer.socket,
-        gameUUID: state.gameReducer.gameUUID,
-        players: state.gameReducer.players,
-        player: state.gameReducer.player
-    };
-}
+const mapStateToProps = state => ({
+    socket: state.appReducer.socket,
+    gameUUID: state.gameReducer.gameUUID,
+    players: state.gameReducer.players,
+    player: state.gameReducer.player
+})
 
 export default connect(mapStateToProps, { setPlayers })(Pregame);

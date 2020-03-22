@@ -6,3 +6,4 @@ export const SET_CURRENT_CANVAS_DATA = "SET_CURRENT_CANVAS_DATA";
 export const SET_GAMEUUID = "SET_GAMEUUID";
 export const SET_PLAYERS = "SET_PLAYERS";
 export const SET_PLAYER = "SET_PLAYER";
+export const SET_DESCRIBER = "SET_DESCRIBER";

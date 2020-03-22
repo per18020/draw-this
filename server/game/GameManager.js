@@ -3,7 +3,8 @@ const Game = require('./Game');
 let instance = null;
 
 class GameManager {
-    constructor() {
+    constructor(io) {
+        this.io = io;
         this.games = [];
         this.socketGameMap = new Map();
 
@@ -17,10 +18,17 @@ class GameManager {
     }
  
     createGame() {
-        let game = new Game();
+        let game = new Game(this.io);
         this.games.push(game);
 
         return game;
+    }
+
+    startGame(gameUUID) {
+        let game = this.getGame(gameUUID);
+        if (game) {
+            game.startGame();
+        }
     }
 
     addPlayerToGame(gameUUID, socket, player) {
@@ -49,8 +57,8 @@ class GameManager {
         return this.socketGameMap.get(socket.id);
     }
 
-    static getInstance() {
-        if (!instance) instance = new GameManager();
+    static getInstance(io) {
+        if (!instance) instance = new GameManager(io);
         return instance;
     }
 }

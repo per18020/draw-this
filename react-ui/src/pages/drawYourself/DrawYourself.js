@@ -37,7 +37,7 @@ function DrawYourself({ socket, currentCanvasData, gameUUID, setPlayer }) {
         <div className="container">
             <div className="section">
                 <div className="columns">
-                <div className="column"></div>
+                    <div className="column"></div>
                     <div className="column">
                         <div className="title">Draw Yourself</div>
                         <Canvas autoSave ></Canvas>
