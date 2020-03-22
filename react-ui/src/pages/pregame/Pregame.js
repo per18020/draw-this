@@ -53,7 +53,6 @@ function Pregame({ socket, gameUUID, players, setPlayers, player }) {
     }
 
     const canStartGame = () => {
-        return true;
         return players.length > 1;
     }
 
