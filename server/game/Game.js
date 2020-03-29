@@ -201,7 +201,7 @@ class Game {
             this.incrementPlayersReadyForRound();
             if (this.isReadyForRound()) {
                 this.startRound(() => {
-                    socket.in(this.uuid).emit('game:round:listenForStarted', this.getCurrentRound());
+                    this.io.in(this.uuid).emit('game:round:listenForStarted', this.getCurrentRound());
                 });
             }
         });
@@ -209,7 +209,7 @@ class Game {
         socket.on('game:round:stop', () => {
             this.onActivity();
             this.setRoundFinished();
-            socket.in(this.uuid).emit('game:round:listenForGoToGame', this.getCurrentRound());
+            this.io.in(this.uuid).emit('game:round:listenForGoToGame', this.getCurrentRound());
         })
 
         socket.on('game:round:get', response => {
@@ -221,7 +221,7 @@ class Game {
             this.onActivity();
             this.setPrompt(request.prompt);
             this.incrementPlayersReadyForScoring();
-            socket.in(this.uuid).emit('game:round:listenForPrompt', this.getCurrentRound());
+            this.io.in(this.uuid).emit('game:round:listenForPrompt', this.getCurrentRound());
             response(this.getCurrentRound());
         });
 
