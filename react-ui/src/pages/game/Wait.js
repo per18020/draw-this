@@ -3,19 +3,16 @@ import { connect } from 'react-redux'
 
 import { Redirect } from 'react-router'
 
-function Wait({ socket, player, describer }) {
+function Wait({ socket }) {
     const [toScoring, setToScoring] = useState(false);
-    const isDescriber = player === describer.id;
 
     useEffect(() => {
-        socket.emit('game:readyForScoring');
-
-        socket.on('game:everyoneIsReadyForScoring', () => {
+        socket.on('game:round:listenForGoToScoring', () => {
             setToScoring(true);
-        })
+        });
 
         return () => {
-            socket.off('game:everyoneIsReadyForScoring');
+            socket.off('game:round:listenForGoToScoring');
         }
     }, [])
 
@@ -34,9 +31,7 @@ function Wait({ socket, player, describer }) {
 }
 
 const mapStateToProps = state => ({
-    socket: state.appReducer.socket,
-    player: state.gameReducer.player,
-    describer: state.gameReducer.describer
+    socket: state.appReducer.socket
 })
 
 export default connect(mapStateToProps)(Wait);

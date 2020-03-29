@@ -1,14 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router';
 
-function Describer({ socket }) {
+import { setRound } from '../../redux/actions';
+
+function Describer({ socket, setRound }) {
     const [prompt, setPrompt] = useState("");
     const [toWait, setToWait] = useState(false)
+    const [imageURL, setImageURL] = useState("");
     const limit = 40;
 
+    useEffect(() => {
+        socket.emit('game:round:get', ({ image }) => {
+            setImageURL(image);
+        });
+    }, [])
+
     const onSendPrompt = () => {
-        socket.emit('game:sendPrompt', { prompt });
+        socket.emit('game:round:sendPrompt', { prompt }, round => {
+            setRound(round);
+        });
         setToWait(true);
     }
 
@@ -29,7 +40,7 @@ function Describer({ socket }) {
                     </div>
                     <div className="field">
                         <figure className="image">
-                            <img src="https://bulma.io/images/placeholders/800x480.png" alt="to describe" />
+                            <img src={imageURL} alt="to describe" />
                         </figure>
                     </div>
                     <div className="field has-addons">
@@ -53,4 +64,4 @@ const mapStateToProps = state => ({
     socket: state.appReducer.socket
 })
 
-export default connect(mapStateToProps)(Describer);
+export default connect(mapStateToProps, { setRound })(Describer);

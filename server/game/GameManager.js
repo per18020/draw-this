@@ -13,7 +13,7 @@ class GameManager {
 
     cleanupStagnantGames() {
         this.games = this.games.filter(game => {
-            return game.isActive();
+            return game.isActive(); // Keep the games that are active
         })
     }
  
@@ -22,13 +22,6 @@ class GameManager {
         this.games.push(game);
 
         return game;
-    }
-
-    startGame(gameUUID) {
-        let game = this.getGame(gameUUID);
-        if (game) {
-            game.startGame();
-        }
     }
 
     addPlayerToGame(gameUUID, socket, player) {

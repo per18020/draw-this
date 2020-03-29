@@ -3,6 +3,8 @@ class SocketAPI {
         this.io = require('socket.io')(server);
         this.gm = require('./game/GameManager').getInstance(this.io);
 
+        require('./api/fineArtAPI').getInstance(); // Start up fineArtAPI
+
         this.io.on('connection', socket => {
 
             socket.on('createGame', response => {
@@ -22,7 +24,6 @@ class SocketAPI {
 
             socket.on('startGame', () => {
                 let gameUUID = this.gm.lookupGameUUID(socket);
-                this.gm.startGame(gameUUID);
                 this.io.in(gameUUID).emit('gameStarted');
             });
 

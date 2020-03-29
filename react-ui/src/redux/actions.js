@@ -3,8 +3,8 @@ import {
     SET_SOCKET, 
     SET_GAMEUUID, 
     SET_PLAYERS,
-    SET_PLAYER,
-    SET_DESCRIBER } from './actionTypes';
+    SET_PLAYER, 
+    SET_ROUND} from './actionTypes';
 
 // App Reducer
 export const setSocket = socket => ({
@@ -33,7 +33,7 @@ export const setPlayer = player => ({
     payload: player
 });
 
-export const setDescriber = describer => ({
-    type: SET_DESCRIBER,
-    payload: describer
+export const setRound = round => ({
+    type: SET_ROUND,
+    payload: round
 })

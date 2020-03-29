@@ -1,24 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router';
+import { stringifyAndCompress } from '../../common/util';
+import { setRound } from '../../redux/actions';
 
 import Canvas from '../../common/components/canvas/Canvas';
 
-function Drawer({ socket }) {
+function Drawer({ socket, currentCanvasData, setRound }) {
     const [prompt, setPrompt] = useState("");
     const [toWait, setToWait] = useState(false);
 
     useEffect(() => {
-        socket.on('game:listenForPrompt', response => {
-            setPrompt(response)
+        socket.on('game:round:listenForPrompt', ({ prompt }) => {
+            setPrompt(prompt);
         })
 
         return () => {
-            socket.off('game:listenForPrompt')
+            socket.off('game:round:listenForPrompt')
         }
     }, [])
 
     const onFinished = () => {
+        let compressedAvatarData = stringifyAndCompress(currentCanvasData);
+        socket.emit("game:round:sendDrawing", compressedAvatarData, round => {
+            setRound(round);
+        });
         setToWait(true);
     }
 
@@ -44,7 +50,8 @@ function Drawer({ socket }) {
 }
 
 const mapStateToProps = state => ({
-    socket: state.appReducer.socket
+    socket: state.appReducer.socket,
+    currentCanvasData: state.appReducer.currentCanvasData
 })
 
-export default connect(mapStateToProps)(Drawer);
+export default connect(mapStateToProps, { setRound })(Drawer);

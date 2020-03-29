@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { setPlayers } from '../../redux/actions';
 import { decompressAndParse } from '../../common/util';
+import { useIsGameOwner, useShareLink } from '../../common/effects';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy } from '@fortawesome/free-solid-svg-icons'
@@ -12,7 +13,9 @@ import { Redirect } from 'react-router';
 function Pregame({ socket, gameUUID, players, setPlayers, player }) {
     const [linkInput, setLinkInput] = useState(null);
     const [toGame, setToGame] = useState(null);
-    const shareURL = window.location.protocol + "//" + window.location.host + "/?join=" + gameUUID; // Abstract to hook?
+    
+    const shareURL = useShareLink(gameUUID);
+    const isGameOwner = useIsGameOwner(player, players);
 
     useEffect(() => {
         socket.emit('getPlayers', { gameUUID }, response => {
@@ -56,15 +59,6 @@ function Pregame({ socket, gameUUID, players, setPlayers, player }) {
         return players.length > 1;
     }
 
-    const isGameOwner = () => {
-        if (!players) return false;
-        let gameOwner = players.find(player => {
-            return player.gameOwner;
-        });
-        if (!gameOwner) return false;
-        return gameOwner.id === player;
-    }
-
     if (toGame)
         return <Redirect to="/game" />
 
@@ -104,7 +98,7 @@ function Pregame({ socket, gameUUID, players, setPlayers, player }) {
                                 And then settings will be here
                             </div>
                         </div>
-                        <button onClick={handleStartGame} className="button is-primary" disabled={!isGameOwner() || !canStartGame()}>Start Game</button>
+                        <button onClick={handleStartGame} className="button is-primary" disabled={!isGameOwner || !canStartGame()}>Start Game</button>
                     </div>
                     <div className="column">
                         <div className="box">
