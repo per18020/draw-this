@@ -149,6 +149,13 @@ class Game {
         return this.setCurrentRound(currentRound);
     }
 
+    setScore(playerID) {
+        // TODO: make this better.
+        let currentRound = this.getCurrentRound();
+        currentRound.score.push({ playerID, score: 1 });
+        return this.setCurrentRound(currentRound);
+    }
+
     incrementPlayersReadyForRound() {
         let currentRound = this.getCurrentRound();
         currentRound.playersReadyForRound++;
@@ -181,13 +188,18 @@ class Game {
             response(this.isGameFinished());
         });
 
+        socket.on('game:getFinalScores', response => {
+            response();
+        })
+
         // ROUND : Server -> Client (These are scattered through the Client -> Server code)
 
-        // socket.in(this.uuid).emit('game:round:listenForStarted', currentRound);
-        // socket.in(this.uuid).emit('game:round:listenForFinished', currentRound);
-        // socket.in(this.uuid).emit('game:round:listenForPrompt', currentRound);
-        // socket.in(this.uuid).emit('game:round:listenForGoToScoring', currentRound);
-        // socket.in(this.uuid).emit('game:round:listenForGoToGame', currentRound);
+        // this.io.in(this.uuid).emit('game:round:listenForStarted', currentRound);
+        // this.io.in(this.uuid).emit('game:round:listenForFinished', currentRound);
+        // this.io.in(this.uuid).emit('game:round:listenForPrompt', currentRound);
+        // this.io.in(this.uuid).emit('game:round:listenForGoToScoring', currentRound);
+        // this.io.in(this.uuid).emit('game:round:listenForGoToGame', currentRound);
+        // this.io.in(this.uuid).emit('game:round:listenForScore', currentRound);
 
         // ROUND : Client -> Server
 
@@ -234,6 +246,12 @@ class Game {
                 this.io.in(this.uuid).emit('game:round:listenForGoToScoring', this.getCurrentRound());
             }
             response(this.getCurrentRound());
+        });
+
+        socket.on('game:round:sendScore', (request, response) => {
+            this.onActivity();
+
+            socket.in(this.uuid).emit('game:round:listenForScore', currentRound);
         });
     }
 }

@@ -69,5 +69,4 @@ const mapStateToProps = state => ({
     players: state.gameReducer.players,
 })
 
-
 export default connect(mapStateToProps, { setRound })(Game);
