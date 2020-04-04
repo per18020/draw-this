@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react'
 
 import DisplayCanvas from '../../common/components/canvas/DisplayCanvas';
 
-function ScoringCard({ canvasData, playerID }) {
+function ScoringCard({ canvasData, onVote, active, score }) {
     const [isVote, setIsVote] = useState(false); // Abstract this to redux, so more than one can't be pressed
 
     const handleVote = () => {
         setIsVote(!isVote);
+        onVote();
     }
 
     return (
@@ -18,7 +19,8 @@ function ScoringCard({ canvasData, playerID }) {
                 height={256}
             />
 
-            <button onClick={handleVote} className={ isVote ? "button is-info" : "button"}>Add Vote</button>
+            <button onClick={handleVote} className={ isVote ? "button is-info" : "button"} disabled={!active}>Add Vote</button>
+            <div className="subtitle">{score} pts.</div>
         </div>
     );
 }

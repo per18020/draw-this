@@ -79,6 +79,7 @@ class Game {
             image: "",
             playersReadyForRound: 0,
             playersReadyForScoring: 0,
+            playersReadyForNextRound: 0,
             finished: false,
             drawings: [],
             scores: []
@@ -150,9 +151,13 @@ class Game {
     }
 
     setScore(playerID) {
-        // TODO: make this better.
         let currentRound = this.getCurrentRound();
-        currentRound.score.push({ playerID, score: 1 });
+        let index = currentRound.scores.findIndex(obj => obj.playerID === playerID);
+        if (index >= 0) {
+            currentRound.scores[index].score++;
+        } else {
+            currentRound.scores.push({ playerID, score: 1 });
+        }
         return this.setCurrentRound(currentRound);
     }
 
@@ -168,6 +173,12 @@ class Game {
         return this.setCurrentRound(currentRound);
     }
 
+    incrementPlayersReadyForNextRound() {
+        let currentRound = this.getCurrentRound();
+        currentRound.playersReadyForNextRound++;
+        return this.setCurrentRound(currentRound);
+    }
+
     isReadyForRound() {
         let currentRound = this.getCurrentRound();
         return currentRound.playersReadyForRound >= this.players.length;
@@ -176,6 +187,11 @@ class Game {
     isReadyForScoring() {
         let currentRound = this.getCurrentRound();
         return currentRound.playersReadyForScoring >= this.players.length;
+    }
+
+    isReadyForNextRound() {
+        let currentRound = this.getCurrentRound();
+        return currentRound.playersReadyForNextRound >= this.players.length - 1; // Minus one because describer (who doesn't draw a picture) votes
     }
 
     // GAME API
@@ -198,6 +214,7 @@ class Game {
         // this.io.in(this.uuid).emit('game:round:listenForFinished', currentRound);
         // this.io.in(this.uuid).emit('game:round:listenForPrompt', currentRound);
         // this.io.in(this.uuid).emit('game:round:listenForGoToScoring', currentRound);
+        // this.io.in(this.uuid).emit('game:round:listenForGoToNextRound', currentRound);
         // this.io.in(this.uuid).emit('game:round:listenForGoToGame', currentRound);
         // this.io.in(this.uuid).emit('game:round:listenForScore', currentRound);
 
@@ -250,8 +267,14 @@ class Game {
 
         socket.on('game:round:sendScore', (request, response) => {
             this.onActivity();
-
-            socket.in(this.uuid).emit('game:round:listenForScore', currentRound);
+            this.setScore(request.playerID);
+            this.incrementPlayersReadyForNextRound();
+            socket.in(this.uuid).emit('game:round:listenForScore', this.getCurrentRound());
+            if (this.isReadyForScoring()) {
+                this.setRoundFinished();
+                this.io.in(this.uuid).emit('game:round:listenForGoToGame', this.getCurrentRound());
+            }
+            response(this.getCurrentRound());
         });
     }
 }

@@ -33,7 +33,7 @@ function App({ setSocket }) {
     <Router>
       <TimeoutContainer />
       <Switch>
-        <Route path="/" exact component={Home} /> 
+        <Route path="/" exact component={Home} />
         <Route path="/drawYourself" component={DrawYourself} />
         <Route path="/pregame" component={Pregame} />
         <Route path="/game" component={Game} />

@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useSelector } from 'react-redux'
 
 export function useWindowSearchParameter(parameter) {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get(parameter);
 }
 
-export function useIsGameOwner(player, players) {
+export function useIsGameOwner() {
+  const player = useSelector(state => state.gameReducer.player);
+  const players = useSelector(state => state.gameReducer.players);
   if (!players) return false;
   let gameOwner = players.find(player => {
     return player.gameOwner;

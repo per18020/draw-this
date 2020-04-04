@@ -12,7 +12,7 @@ function Game({ socket, players, player, setRound }) {
     const [isLoading, setIsLoading] = useState(true);
     const [toRanking, setToRanking] = useState(false);
 
-    const isGameOwner = useIsGameOwner(player, players);
+    const isGameOwner = useIsGameOwner();
 
     useEffect(() => {
         socket.emit('game:isFinished', isFinished => {
