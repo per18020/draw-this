@@ -4,6 +4,8 @@ import { Redirect } from 'react-router';
 
 import { setRound } from '../../redux/actions';
 
+import Timer from '../../common/components/Timer';
+
 function Describer({ socket, setRound }) {
     const [prompt, setPrompt] = useState("");
     const [toWait, setToWait] = useState(false)
@@ -40,7 +42,7 @@ function Describer({ socket, setRound }) {
                     </div>
                     <div className="field">
                         <figure className="image">
-                            <img src={imageURL} alt="to describe" />
+                            <img src={imageURL} alt="To describe" />
                         </figure>
                     </div>
                     <div className="field has-addons">
@@ -52,7 +54,12 @@ function Describer({ socket, setRound }) {
                         </div>
                     </div>
                     <div className="field">
-                        <p className="">{prompt.length} of {limit} characters used</p>
+                        <p>{prompt.length} of {limit} characters used</p>
+                    </div>
+                    <div className="field">
+                        <div className="title">
+                            <Timer onTimeout={onSendPrompt} time={20} /> seconds remaining
+                        </div>
                     </div>
                 </div>
             </div>

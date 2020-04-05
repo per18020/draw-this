@@ -1,8 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { Redirect } from "react-router-dom"
+import { connect } from 'react-redux'
 
-function Ranking() {
+import RankingUserCard from './RankingUserCard'
+
+function Ranking({ socket }) {
     const [toHome, setToHome] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [scores, setScores] = useState(null);
+
+    useEffect(() => {
+        socket.emit('game:getFinalScores', ({ finalScores }) => {
+            setScores(finalScores);
+            setIsLoading(false);
+        })
+    }, [])
 
     const next = () => {
         setToHome(true);
@@ -11,17 +23,32 @@ function Ranking() {
     if (toHome)
         return <Redirect to="/" />
 
-    return (
-        <section className="hero is-fullheight">
-            <div className="hero-body">
-                <div className="container">
+    if (isLoading) {
+        return (
+            <section className="hero is-fullheight">
+                <div className="hero-body">
+                    <div className="container">
+                        <div className="title">Loading...</div>
+                    </div>
+                </div>
+            </section>
+        );
+    } else {
+        return (
+            <div className="container">
+                <div className="section">
                     <div className="title">Ranking</div>
-                    <div className="subtitle">This final page is also complex, and will be built next week</div>
-                    <button onClick={next} className="button">Back Home</button>
+                    {scores.map(item => {
+                        return <RankingUserCard key={item.playerID} playerID={item.playerID} score={item.score} place={item.place}/>
+                    })}
                 </div>
             </div>
-        </section>
-    );
+        );
+    }
 }
 
-export default Ranking;
+const mapStateToProps = state => ({
+    socket: state.appReducer.socket
+})
+
+export default connect(mapStateToProps)(Ranking);

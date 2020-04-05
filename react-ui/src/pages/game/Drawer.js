@@ -5,6 +5,7 @@ import { stringifyAndCompress } from '../../common/util';
 import { setRound } from '../../redux/actions';
 
 import Canvas from '../../common/components/canvas/Canvas';
+import Timer from '../../common/components/Timer';
 
 function Drawer({ socket, currentCanvasData, setRound }) {
     const [prompt, setPrompt] = useState("");
@@ -41,6 +42,9 @@ function Drawer({ socket, currentCanvasData, setRound }) {
                             <div className="title">Prompt: {prompt}</div>
                             <Canvas autosave></Canvas>
                             <button onClick={onFinished} className="button is-primary">Finish Drawing</button>
+                            <div className="title">
+                                <Timer onTimeout={onFinished} time={60} /> seconds remaining
+                            </div>
                         </div>
                     }
                 </div>

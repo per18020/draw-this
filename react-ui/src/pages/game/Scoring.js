@@ -3,7 +3,6 @@ import { Redirect } from "react-router-dom"
 import { connect } from 'react-redux'
 import { decompressAndParse } from '../../common/util';
 import { setRound } from '../../redux/actions';
-import { useIsGameOwner } from '../../common/effects';
 
 import ScoringCard from './ScoringCard';
 import StackGrid from "react-stack-grid";
@@ -13,8 +12,6 @@ function Scoring({ socket, roundState, setRound, player }) {
     const [toGame, setToGame] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [canVote, setCanVote] = useState(true);
-
-    const isGameOwner = useIsGameOwner();
 
     useEffect(() => {
         socket.emit('game:round:get', round => {
@@ -67,17 +64,21 @@ function Scoring({ socket, roundState, setRound, player }) {
         return (
             <div className="container">
                 <div className="section">
+                    <div className="title">Original Image</div>
+                    <figure className="image">
+                        <img src={roundState.image} alt="Original Image" />
+                    </figure>
                     <div className="title">Scoring</div>
                     <StackGrid columnWidth={"33.33%"}>
                         {roundState.drawings.map(obj => {
                             return (
-                                <ScoringCard 
-                                    key={obj.playerID} 
-                                    active={canVote && !(obj.playerID === player)} 
-                                    score={getScoreHelper(obj.playerID)} 
-                                    onVote={() => onVote(obj.playerID)} 
-                                    canvasData={decompressAndParse(obj.data)} 
-                                    />
+                                <ScoringCard
+                                    key={obj.playerID}
+                                    active={canVote && !(obj.playerID === player)}
+                                    score={getScoreHelper(obj.playerID)}
+                                    onVote={() => onVote(obj.playerID)}
+                                    canvasData={decompressAndParse(obj.data)}
+                                />
                             )
                         })}
                     </StackGrid>

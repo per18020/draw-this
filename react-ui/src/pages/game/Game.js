@@ -7,12 +7,11 @@ import { Redirect } from 'react-router';
 import Describer from './Describer';
 import Drawer from './Drawer';
 
-function Game({ socket, players, player, setRound }) {
+function Game({ socket, player, setRound }) {
     const [isDescriber, setIsDescriber] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [toRanking, setToRanking] = useState(false);
 
-    const isGameOwner = useIsGameOwner();
 
     useEffect(() => {
         socket.emit('game:isFinished', isFinished => {
@@ -24,9 +23,7 @@ function Game({ socket, players, player, setRound }) {
                 setIsDescriber(round.describer.id === player);
             });
 
-            if (isGameOwner) {
-                socket.emit('game:round:create');
-            }
+            socket.emit('game:round:create');
 
             socket.emit('game:round:ready');
         });
@@ -66,7 +63,6 @@ function Game({ socket, players, player, setRound }) {
 const mapStateToProps = state => ({
     socket: state.appReducer.socket,
     player: state.gameReducer.player,
-    players: state.gameReducer.players,
 })
 
 export default connect(mapStateToProps, { setRound })(Game);

@@ -84,6 +84,10 @@ class Game {
             drawings: [],
             scores: []
         });
+        console.log("ROUNDS")
+        console.log(this.rounds);
+        console.log("ROUND")
+        console.log(this.getCurrentRound());
     }
 
     startRound(callback) {
@@ -205,8 +209,45 @@ class Game {
         });
 
         socket.on('game:getFinalScores', response => {
-            response();
-        })
+            const rounds = this.rounds;
+            let tempScores = [];
+            let finalScores = [];
+            let roundScores = [];
+            // Consolidates all the scores from different rounds into a single array
+            for (let i = 0; i < rounds.length; i++) {
+                const scores = rounds[i].scores;
+                roundScores.push(scores);
+                for (let j = 0; j < scores.length; j++) {
+                    const scoreObj = scores[j];
+                    const index = tempScores.findIndex(obj => obj.playerID === scoreObj.playerID);
+                    if (index <= -1) {
+                        tempScores.push(scoreObj);
+                    } else {
+                        tempScores[index].score += scoreObj.score;
+                    }
+                }
+            }
+            // Ranking
+            tempScores.sort((a, b) => b.score - a.score);
+            let place = 1;
+            for (let i = 0; i < tempScores.length; i++) {
+                let scoreObj = tempScores[i];
+                let nextScoreObj = tempScores[i + 1];
+                finalScores.push({
+                    playerID: scoreObj.playerID,
+                    score: scoreObj.score,
+                    place
+                });
+                if (nextScoreObj) {
+                    if (scoreObj.score !== nextScoreObj.score) place++;
+                }
+            }
+            response({ finalScores, roundScores });
+        });
+
+        socket.on('game:stop', () => {
+
+        });
 
         // ROUND : Server -> Client (These are scattered through the Client -> Server code)
 
@@ -222,7 +263,8 @@ class Game {
 
         socket.on('game:round:create', () => {
             this.onActivity();
-            this.createRound();
+            if (!this.getCurrentRound()) return this.createRound();
+            if (this.getCurrentRound().finished) this.createRound();
         });
 
         socket.on('game:round:ready', () => {
@@ -270,7 +312,7 @@ class Game {
             this.setScore(request.playerID);
             this.incrementPlayersReadyForNextRound();
             socket.in(this.uuid).emit('game:round:listenForScore', this.getCurrentRound());
-            if (this.isReadyForScoring()) {
+            if (this.isReadyForNextRound()) {
                 this.setRoundFinished();
                 this.io.in(this.uuid).emit('game:round:listenForGoToGame', this.getCurrentRound());
             }

@@ -90,14 +90,14 @@ function Pregame({ socket, gameUUID, players, setPlayers, player }) {
                 </div>
                 <div className="columns">
                     <div className="column">
-                        <div className="box">
+                        {/* <div className="box">
                             <div className="title">
                                 Settings
                             </div>
                             <div className="subtitle">
                                 And then settings will be here
                             </div>
-                        </div>
+                        </div> */}
                         <button onClick={handleStartGame} className="button is-primary" disabled={!isGameOwner || !canStartGame()}>Start Game</button>
                     </div>
                     <div className="column">
