@@ -43,7 +43,7 @@ function Drawer({ socket, currentCanvasData, setRound }) {
                             <Canvas autosave></Canvas>
                             <button onClick={onFinished} className="button is-primary">Finish Drawing</button>
                             <div className="title">
-                                <Timer onTimeout={onFinished} time={5} /> seconds remaining
+                                <Timer onTimeout={onFinished} time={90} /> seconds remaining
                             </div>
                         </div>
                     }
