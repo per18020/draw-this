@@ -84,10 +84,6 @@ class Game {
             drawings: [],
             scores: []
         });
-        console.log("ROUNDS")
-        console.log(this.rounds);
-        console.log("ROUND")
-        console.log(this.getCurrentRound());
     }
 
     startRound(callback) {

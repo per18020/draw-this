@@ -21,7 +21,7 @@ class FineArtAPI {
     getRandomImage(callback) {
         let objectID = this.objectList[util.randomInt(0, this.objectList.length)];
         axios.get(this.objectURL + objectID).then((response) => {
-            callback(response.data.primaryImage);
+            callback(response.data.primaryImageSmall);
         });
     }
 
